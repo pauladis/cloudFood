@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  cloudFood
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  ClientFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/order/
+      Handler: app.handler
+      Runtime: python3.8
+      Events:
+        order_get:
+          Type: Api
+          Properties:
+            Path: /order
+            Method: get
+        order_post:
+          Type: Api
+          Properties:
+            Path: /order
+            Method: post
+
+
+
+Outputs:
+  ClientFunctionApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  ClientFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt ClientFunction.Arn
+  ClientFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt ClientFunctionIamRole.Arn
